@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import pandas as pd
 
 # Create your views here.
 
@@ -16,8 +17,14 @@ def addition(request):
         a = int(num1)
         b = int(num2)
         res = a + b
+        
+        # initialize list of lists
+        data = [['output', res]]
+          
+        # Create the pandas DataFrame
+        df = pd.DataFrame(data, columns=['key', 'value'])
 
-        return render(request, "result.html", {"result": res})
+        return render(request, "result.html", {"result": df})
     else:
         res = "Only digits are allowed"
-        return render(request, "result.html", {"result": res})
+        return render(request, "result.html", {"result": df})
