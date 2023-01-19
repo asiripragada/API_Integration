@@ -19,12 +19,12 @@ def addition(request):
         res = a + b
         
         # initialize list of lists
-        data = [['output', res]]
+#         data = [['output', res]]
           
         # Create the pandas DataFrame
-        df = pd.DataFrame(data, columns=['key', 'value'])
+#         df = pd.DataFrame(data, columns=['key', 'value'])
 
-        return render(request, "result.html", {"result": df})
+        return render(request, "result.html", {"result": rs})
     else:
         res = "Only digits are allowed"
-        return render(request, "result.html", {"result": df})
+        return render(request, "result.html", {"result": rs})
