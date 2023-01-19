@@ -24,7 +24,7 @@ def addition(request):
         # Create the pandas DataFrame
 #         df = pd.DataFrame(data, columns=['key', 'value'])
 
-        return render(request, "result.html", {"result": res})
+        return HttpResponse(res)
     else:
         res = "Only digits are allowed"
         return render(request, "result.html", {"result": res})
