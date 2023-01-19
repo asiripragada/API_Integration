@@ -17,7 +17,7 @@ def addition(request):
         a = int(num1)
         b = int(num2)
         res = a + b
-        res1 = a - b
+  
         
         # initialize list of lists
 #         data = [['output', res]]
