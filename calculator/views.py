@@ -27,7 +27,7 @@ def addition(request):
 #         df = pd.DataFrame(data, columns=['key', 'value'])
 
         #return HttpResponse(int(res))
-        return JsonResponse({'key':str(res)})
+        return JsonResponse({'key':int(res)})
     else:
         res = "Only digits are allowed"
         return render(request, "result.html", {"result": res})
