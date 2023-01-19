@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 import pandas as pd
 
 # Create your views here.
@@ -25,7 +26,8 @@ def addition(request):
         # Create the pandas DataFrame
 #         df = pd.DataFrame(data, columns=['key', 'value'])
 
-        return HttpResponse(int(res))
+        #return HttpResponse(int(res))
+        return JsonResponse('key':res)
     else:
         res = "Only digits are allowed"
         return render(request, "result.html", {"result": res})
