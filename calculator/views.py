@@ -17,6 +17,7 @@ def addition(request):
         a = int(num1)
         b = int(num2)
         res = a + b
+        res1 = a - b
         
         # initialize list of lists
 #         data = [['output', res]]
@@ -24,7 +25,7 @@ def addition(request):
         # Create the pandas DataFrame
 #         df = pd.DataFrame(data, columns=['key', 'value'])
 
-        return HttpResponse(res)
+        return HttpResponse(res,res1)
     else:
         res = "Only digits are allowed"
         return render(request, "result.html", {"result": res})
