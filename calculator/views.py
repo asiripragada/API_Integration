@@ -26,8 +26,11 @@ def addition(request):
         # Create the pandas DataFrame
 #         df = pd.DataFrame(data, columns=['key', 'value'])
 
+        result = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
+        return JsonResponse(json.loads(result), safe = False)
+
         #return HttpResponse(int(res))
-        return JsonResponse({'key':int(res)})
+#         return JsonResponse({'key':int(res)})
     else:
         res = "Only digits are allowed"
         return render(request, "result.html", {"result": res})
