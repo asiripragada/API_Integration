@@ -5,3 +5,4 @@ sqlparse==0.4.3
 tzdata==2022.7
 whitenoise==6.3.0
 pandas==1.5.2
+scikit-learn==1.2.0
