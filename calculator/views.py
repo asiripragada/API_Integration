@@ -35,7 +35,7 @@ def addition(request):
         b = int(num2)
 
         
-        data=pd.read_csv(r"C:\Users\yugandhar.gantala\Documents\ML_and_AI_Labs\django_Projects\FirstProject\calculator\employee_data.csv")
+        data=pd.read_csv("calculator/employee_data.csv")
         
         data=data.drop(["filed_complaint","recently_promoted"],axis=1)
         data['tenure']=data['tenure'].replace(np.NaN,0)
