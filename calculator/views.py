@@ -26,7 +26,7 @@ def index(request):
 
 def addition(request):
     model_name = request.GET['model_name']
-    JobName = request.GET['JobName']
+    JobName = request.GET['jobname']
     num1 = request.GET['max_depth']
     num2 = request.GET['train_test_split']
     criterion = request.GET['criterion']
