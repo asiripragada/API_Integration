@@ -26,16 +26,18 @@ def index(request):
 
 def addition(request):
     model_name = request.GET['model_name']
-    num1 = request.GET['max_depth']
-    num2 = request.GET['n_estimators']
+    JobName = request.GET['JobName']
+    num1 = request.GET['num1']
+    num2 = request.GET['num2']
     criterion = request.GET['criterion']
 
     if num1.isdigit() and num2.isdigit():
         a = int(num1)
         b = int(num2)
+        b=b/100
 
         
-        data=pd.read_csv("calculator/employee_data.csv")
+        data=pd.read_csv(r"C:\Users\yugandhar.gantala\Documents\ML_and_AI_Labs\django_Projects\FirstProject\calculator\employee_data.csv")
         
         data=data.drop(["filed_complaint","recently_promoted"],axis=1)
         data['tenure']=data['tenure'].replace(np.NaN,0)
@@ -54,7 +56,7 @@ def addition(request):
         ## Split the data into X and y
         X = data.copy().drop("status_Left",axis=1)
         y = data["status_Left"]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=b)
         
         X_train['satisfaction'].fillna(X_train['satisfaction'].mean(),inplace=True)
         X_train['last_evaluation'].fillna(X_train['last_evaluation'].mean(),inplace=True)
@@ -71,7 +73,7 @@ def addition(request):
         ####random forest
         
         rfc = RandomForestClassifier(criterion=criterion,
-                       max_depth=a, n_estimators=b,)
+                       max_depth=a)
         rfc.fit(X = X_train,y = y_train)
         
         train_predictions = rfc.predict(X_train)
@@ -81,6 +83,7 @@ def addition(request):
         Test_Score=accuracy_score(y_test,test_predictions)
     
         predictions=pd.DataFrame(test_predictions)
+        predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
         #predictions1 = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
         
