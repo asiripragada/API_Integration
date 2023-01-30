@@ -31,10 +31,10 @@ def addition(request):
     num2 = request.GET['train_test_split']
     criterion = request.GET['criterion']
 
-    if num1.isdigit() and num2.isdigit():
+    if num1.isdigit():
         a = int(num1)
-        b = int(num2)
-        b=b/100
+        b = float(num2)
+        
 
         
         data=pd.read_csv(r"calculator/employee_data.csv")
