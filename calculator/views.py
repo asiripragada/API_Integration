@@ -27,8 +27,8 @@ def index(request):
 def addition(request):
     model_name = request.GET['model_name']
     JobName = request.GET['JobName']
-    num1 = request.GET['num1']
-    num2 = request.GET['num2']
+    num1 = request.GET['max_depth']
+    num2 = request.GET['train_test_split']
     criterion = request.GET['criterion']
 
     if num1.isdigit() and num2.isdigit():
