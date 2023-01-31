@@ -83,6 +83,10 @@ def addition(request):
         Test_Score=accuracy_score(y_test,test_predictions)
     
         predictions=pd.DataFrame(test_predictions)
+        predictions.rename(columns={0:'Values'},inplace=True)
+        predictions['Parameter']='Predictions'
+        
+        predictions=predictions.append(pd.DataFrame({'Values':[Test_Score], 'Parameter':['Accuracy']})).reset_index(drop=True)
         predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
         #predictions1 = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
