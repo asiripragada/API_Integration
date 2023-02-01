@@ -85,10 +85,10 @@ def addition(request):
         predictions = rfc.predict(test_df)
 
         Train_Score=accuracy_score(y_train,train_predictions)
-        Test_accuracy=accuracy_score(y_test,test_predictions)
-        Test_f1_score=f1_score(y_test,test_predictions)
-        Test_precision_score=precision_score(y_test,test_predictions)
-        Test_recall_score=recall_score(y_test,test_predictions)
+        Test_accuracy=accuracy_score(y_test,test_predictions)*100
+        Test_f1_score=f1_score(y_test,test_predictions)*100
+        Test_precision_score=precision_score(y_test,test_predictions)*100
+        Test_recall_score=recall_score(y_test,test_predictions)*100
 
         predictions=pd.DataFrame(predictions)
         predictions.rename(columns={0:'Values'},inplace=True)
