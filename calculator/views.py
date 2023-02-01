@@ -38,6 +38,7 @@ def addition(request):
 #         data=pd.read_csv(r"calculator/employee_data.csv")
         data=pd.read_csv(r"calculator/train.csv")
         test_df=pd.read_csv(r"calculator/test.csv")
+        test_df_copy=test_df.copy()
 
         drop_list = ["Cabin","Name","Ticket"]
         data = data.drop(drop_list, axis=1)
@@ -92,6 +93,9 @@ def addition(request):
         predictions=pd.DataFrame(predictions)
         predictions.rename(columns={0:'Values'},inplace=True)
         predictions['PassengerId']=test_df['PassengerId']
+        predictions=pd.merge(predictions,test_df_copy,on='PassengerId',how='Left')
+        
+     
         predictions['Parameter']='Predictions'
 
         predictions=predictions.append(pd.DataFrame({'Values':[Test_accuracy,Test_f1_score,Test_precision_score,Test_recall_score], 'Parameter':['Accuracy', 'f1_score', 'precision_score', 'recall_score']})).reset_index(drop=True)
