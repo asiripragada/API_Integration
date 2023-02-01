@@ -37,59 +37,68 @@ def addition(request):
         
 
         
-        data=pd.read_csv(r"calculator/employee_data.csv")
+#         data=pd.read_csv(r"calculator/employee_data.csv")
         
-        data=data.drop(["filed_complaint","recently_promoted"],axis=1)
-        data['tenure']=data['tenure'].replace(np.NaN,0)
-        data['department']=data['department'].replace(np.NaN,'sales')
-        
-        cat_cols=["department","salary","n_projects","tenure","status"]
-        num_cols=["last_evaluation","satisfaction","avg_monthly_hrs"]
+        data=pd.read_csv(r"calculator/train.csv")
+        test_df=pd.read_csv(r"calculator/test.csv")
+
+        drop_list = ["Cabin","Name","Ticket"]
+        data = data.drop(drop_list, axis=1)
+        test_df = test_df.drop(drop_list, axis=1)
+        # data = data.drop(["PassengerId"], axis=1)
+
+        cat_cols=["Survived","Pclass","Sex","SibSp","Embarked","Parch"]
+        num_cols=["PassengerId","Age","Fare"]
         data[cat_cols] = data[cat_cols].apply(lambda x: x.astype('category'))
         data[num_cols] = data[num_cols].apply(lambda x: x.astype('float'))
-        
-        
-        ## Convert Categorical Columns to Dummies
-        cat_cols=["department","salary","n_projects","tenure","status"]
-        data = pd.get_dummies(data,columns=cat_cols,drop_first=True,)
-        
+
+        test_cat_cols=["Pclass","Sex","SibSp","Embarked","Parch"]
+
+        test_df[test_cat_cols] = test_df[test_cat_cols].apply(lambda x: x.astype('category'))
+        test_df[num_cols] = test_df[num_cols].apply(lambda x: x.astype('float'))
+
+        test_df['Fare'].fillna(test_df['Fare'].mean(),inplace=True)
+
+        sexReplacer = lambda x:x.map({'male':0,'female':1})
+        data['Sex'] = data[['Sex']].apply(sexReplacer)
+        data["Age"] = data["Age"].fillna(data["Age"].mean())
+        embarkedReplacer = lambda x:x.map({'S':0,'C':1,'Q':2})
+        data['Embarked'] = data[['Embarked']].apply(embarkedReplacer)
+        data["Embarked"] = data["Embarked"].fillna(data["Embarked"].mean())
+
+        sexReplacer = lambda x:x.map({'male':0,'female':1})
+        test_df['Sex'] = test_df[['Sex']].apply(sexReplacer)
+        test_df["Age"] = test_df["Age"].fillna(test_df["Age"].mean())
+        embarkedReplacer = lambda x:x.map({'S':0,'C':1,'Q':2})
+        test_df['Embarked'] = test_df[['Embarked']].apply(embarkedReplacer)
+        test_df["Embarked"] = test_df["Embarked"].fillna(test_df["Embarked"].mean())
+
         ## Split the data into X and y
-        X = data.copy().drop("status_Left",axis=1)
-        y = data["status_Left"]
+        X = data.copy().drop("Survived",axis=1)
+        y = data["Survived"]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=b)
-        
-        X_train['satisfaction'].fillna(X_train['satisfaction'].mean(),inplace=True)
-        X_train['last_evaluation'].fillna(X_train['last_evaluation'].mean(),inplace=True)
-        
-        X_test['satisfaction'].fillna(X_train['satisfaction'].mean(),inplace=True)
-        X_test['last_evaluation'].fillna(X_train['last_evaluation'].mean(),inplace=True)
-        
-        scaler=StandardScaler()
-        scaler.fit(X_train.iloc[:,:3])
-        
-        X_train.iloc[:,:3]=scaler.transform(X_train.iloc[:,:3])
-        X_test.iloc[:,:3]=scaler.transform(X_test.iloc[:,:3])
-        
-        ####random forest
-        
+
         rfc = RandomForestClassifier(criterion=criterion,
                        max_depth=a)
         rfc.fit(X = X_train,y = y_train)
-        
+
         train_predictions = rfc.predict(X_train)
         test_predictions = rfc.predict(X_test)
-        
+        predictions = rfc.predict(test_df)
+
         Train_Score=accuracy_score(y_train,train_predictions)
         Test_accuracy=accuracy_score(y_test,test_predictions)
         Test_f1_score=f1_score(y_test,test_predictions)
         Test_precision_score=precision_score(y_test,test_predictions)
         Test_recall_score=recall_score(y_test,test_predictions)
-    
-        predictions=pd.DataFrame(test_predictions)
+
+        predictions=pd.DataFrame(predictions)
         predictions.rename(columns={0:'Values'},inplace=True)
+        predictions['PassengerId']=test_df['PassengerId']
         predictions['Parameter']='Predictions'
-        
+
         predictions=predictions.append(pd.DataFrame({'Values':[Test_accuracy,Test_f1_score,Test_precision_score,Test_recall_score], 'Parameter':['Accuracy', 'f1_score', 'precision_score', 'recall_score']})).reset_index(drop=True)
+
         predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
         #predictions1 = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
