@@ -93,7 +93,7 @@ def addition(request):
         predictions=pd.DataFrame(predictions)
         predictions.rename(columns={0:'Values'},inplace=True)
         predictions['PassengerId']=test_df['PassengerId']
-        predictions=pd.merge(predictions,test_df_copy,on='PassengerId',how='Left')
+        predictions=pd.merge(predictions,test_df_copy,on='PassengerId',how='left')
         
      
         predictions['Parameter']='Predictions'
