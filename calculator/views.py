@@ -16,7 +16,7 @@ from sklearn import tree,ensemble
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score,f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 # Create your views here.
 
@@ -80,13 +80,16 @@ def addition(request):
         test_predictions = rfc.predict(X_test)
         
         Train_Score=accuracy_score(y_train,train_predictions)
-        Test_Score=accuracy_score(y_test,test_predictions)
+        Test_accuracy=accuracy_score(y_test,test_predictions)
+        Test_f1_score=f1_score(y_test,test_predictions)
+        Test_precision_score=precision_score(y_test,test_predictions)
+        Test_recall_score=recall_score(y_test,test_predictions)
     
         predictions=pd.DataFrame(test_predictions)
         predictions.rename(columns={0:'Values'},inplace=True)
         predictions['Parameter']='Predictions'
         
-        predictions=predictions.append(pd.DataFrame({'Values':[Test_Score], 'Parameter':['Accuracy']})).reset_index(drop=True)
+        predictions=predictions.append(pd.DataFrame({'Values':[Test_accuracy,Test_f1_score,Test_precision_score,Test_recall_score], 'Parameter':['Accuracy', 'f1_score', 'precision_score', 'recall_score']})).reset_index(drop=True)
         predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
         #predictions1 = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
