@@ -34,11 +34,8 @@ def addition(request):
     if num1.isdigit():
         a = int(num1)
         b = float(num2)
-        
 
-        
 #         data=pd.read_csv(r"calculator/employee_data.csv")
-        
         data=pd.read_csv(r"calculator/train.csv")
         test_df=pd.read_csv(r"calculator/test.csv")
 
@@ -47,15 +44,15 @@ def addition(request):
         test_df = test_df.drop(drop_list, axis=1)
         # data = data.drop(["PassengerId"], axis=1)
 
-        cat_cols=["Survived","Pclass","Sex","SibSp","Embarked","Parch"]
-        num_cols=["PassengerId","Age","Fare"]
-        data[cat_cols] = data[cat_cols].apply(lambda x: x.astype('category'))
-        data[num_cols] = data[num_cols].apply(lambda x: x.astype('float'))
+#         cat_cols=["Survived","Pclass","Sex","SibSp","Embarked","Parch"]
+#         num_cols=["PassengerId","Age","Fare"]
+#         data[cat_cols] = data[cat_cols].apply(lambda x: x.astype('category'))
+#         data[num_cols] = data[num_cols].apply(lambda x: x.astype('float'))
 
-        test_cat_cols=["Pclass","Sex","SibSp","Embarked","Parch"]
+#         test_cat_cols=["Pclass","Sex","SibSp","Embarked","Parch"]
 
-        test_df[test_cat_cols] = test_df[test_cat_cols].apply(lambda x: x.astype('category'))
-        test_df[num_cols] = test_df[num_cols].apply(lambda x: x.astype('float'))
+#         test_df[test_cat_cols] = test_df[test_cat_cols].apply(lambda x: x.astype('category'))
+#         test_df[num_cols] = test_df[num_cols].apply(lambda x: x.astype('float'))
 
         test_df['Fare'].fillna(test_df['Fare'].mean(),inplace=True)
 
@@ -98,7 +95,6 @@ def addition(request):
         predictions['Parameter']='Predictions'
 
         predictions=predictions.append(pd.DataFrame({'Values':[Test_accuracy,Test_f1_score,Test_precision_score,Test_recall_score], 'Parameter':['Accuracy', 'f1_score', 'precision_score', 'recall_score']})).reset_index(drop=True)
-
         predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
         return JsonResponse(json.loads(predictions1), safe = False)
