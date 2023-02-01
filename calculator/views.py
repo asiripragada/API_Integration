@@ -101,8 +101,6 @@ def addition(request):
 
         predictions['JobID']=JobName
         predictions1=predictions.to_json(orient='records')
-        #predictions1 = pd.DataFrame({'bla':[1,2,3],'bla2':['a','b','c']}).to_json(orient='records')
-        
         return JsonResponse(json.loads(predictions1), safe = False)
 
         #return predictions1
